@@ -1,0 +1,62 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+      "title": "http_request",
+      "version": "1.0.0",
+      "description": "Proxy outbound HTTP calls"
+    },
+    "servers": [
+      {
+        "url": "https://httpgetsonnet-o6zfm660w-aquaboy2005-gmailcoms-projects.vercel.app"
+      }
+    ],
+    "paths": {
+      "/api/http_request": {
+        "post": {
+          "summary": "Proxy HTTP requests",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "method": { "type": "string", "enum": ["GET","POST"] },
+                    "url":    { "type": "string", "format": "uri"     },
+                    "headers": {
+                      "type": "object",
+                      "additionalProperties": { "type": "string" }
+                    },
+                    "params": {
+                      "type": "object",
+                      "additionalProperties": { "type": "string" }
+                    },
+                    "data": {
+                      "oneOf": [
+                        { "type": "string" },
+                        { "type": "object" }
+                      ]
+                    }
+                  },
+                  "required": ["method","url"],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Success",
+              "content": {
+                "application/json": {
+                  "schema": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  
