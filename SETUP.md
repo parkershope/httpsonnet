@@ -8,12 +8,6 @@
 npm install
 ```
 
-**Note:** If you're in a restricted network environment where Puppeteer/Chromium downloads are blocked, use:
-
-```bash
-PUPPETEER_SKIP_DOWNLOAD=true npm install
-```
-
 ### 2. Configure Environment Variables
 
 ```bash
@@ -172,16 +166,6 @@ npx prisma migrate reset
 
 ## Troubleshooting
 
-### Puppeteer Installation Issues
-
-If Puppeteer fails to download Chromium:
-
-```bash
-PUPPETEER_SKIP_DOWNLOAD=true npm install
-```
-
-Note: You'll need to provide your own Chrome/Chromium binary in production, or use `@sparticuz/chromium` for serverless environments.
-
 ### Prisma Client Not Found
 
 If you see "Cannot find module '@prisma/client'":
@@ -218,9 +202,8 @@ PORT=3001 npm run dev
 
 **Important:** Configure these in Vercel:
 - Add all environment variables from `.env.example`
-- Set `PUPPETEER_SKIP_DOWNLOAD=true`
-- Consider using `@sparticuz/chromium` for serverless Puppeteer
-- Increase function timeout for DMCA processing
+- Optionally set `APPLE_DMCA_ENDPOINT` and `GOOGLE_DMCA_ENDPOINT` if you have direct API access
+- Increase function timeout for webhook processing and DMCA submissions
 
 ### Docker
 

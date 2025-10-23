@@ -1,32 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { submissionSchema } from '@/lib/validations'
-import formidable from 'formidable'
 import { writeFile, mkdir } from 'fs/promises'
 import { existsSync } from 'fs'
 import path from 'path'
-import { Readable } from 'stream'
-
-// Disable Next.js body parsing to handle multipart/form-data
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-}
-
-// Helper to convert ReadableStream to Node.js Readable
-async function streamToBuffer(stream: ReadableStream): Promise<Buffer> {
-  const reader = stream.getReader()
-  const chunks: Uint8Array[] = []
-
-  while (true) {
-    const { done, value } = await reader.read()
-    if (done) break
-    chunks.push(value)
-  }
-
-  return Buffer.concat(chunks)
-}
 
 export async function POST(request: NextRequest) {
   try {

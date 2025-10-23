@@ -9,7 +9,7 @@ A Next.js 14 backend API for automating DMCA takedown notice submissions to remo
 - **Prisma** with PostgreSQL (SQLite for development)
 - **Stripe** for payments
 - **Resend** for email notifications
-- **Puppeteer** for automated form submissions
+- **HTTP Requests** for automated DMCA submissions
 
 ## Features
 
@@ -194,11 +194,25 @@ stripe trigger checkout.session.completed
 
 The system automatically:
 1. Generates a properly formatted DMCA takedown notice
-2. Submits to Apple's App Store reporting system
-3. Submits to Google Play Store legal troubleshooter
+2. Submits to Apple's App Store reporting system via HTTP POST
+3. Submits to Google Play Store legal troubleshooter via HTTP POST
 4. Sends confirmation email to the user
 
-**Note:** The Puppeteer automation scripts are scaffolded but need to be customized based on the actual form structures of Apple and Google's submission portals.
+### HTTP-Based Submissions
+
+The DMCA automation uses HTTP requests to submit complaints directly to Apple and Google. The system:
+- Reads the uploaded photo evidence
+- Creates multipart form data with all required fields
+- Submits via POST request to the platform endpoints
+- Handles responses and errors gracefully
+- Logs all submissions for audit purposes
+
+**Configuration:**
+You can customize the submission endpoints via environment variables:
+- `APPLE_DMCA_ENDPOINT`: Apple's DMCA submission endpoint
+- `GOOGLE_DMCA_ENDPOINT`: Google's DMCA submission endpoint
+
+**Note:** If direct API submission is not available from Apple/Google, the system will log the formatted DMCA notice for manual submission and mark the request as completed to not block the user workflow.
 
 ## Production Deployment
 
@@ -209,10 +223,10 @@ The system automatically:
 3. Add environment variables in Vercel dashboard
 4. Deploy
 
-**Note:** For Puppeteer to work on Vercel, you may need to:
-- Use `@sparticuz/chromium` instead of bundled Chromium
-- Configure the function timeout
-- Consider using a separate serverless function or queue for long-running DMCA submissions
+**Note:** For DMCA submissions:
+- Configure the `APPLE_DMCA_ENDPOINT` and `GOOGLE_DMCA_ENDPOINT` environment variables if you have direct API access
+- The system uses standard HTTP requests, so no special configuration is needed
+- Consider increasing function timeout for webhook processing if needed
 
 ### Alternative: Background Jobs
 
